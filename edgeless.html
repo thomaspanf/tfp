@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- This file was created with the aha Ansi HTML Adapter. https://github.com/theZiz/aha -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<body style="background-color:#5a5a5a;">
+<meta http-equiv="Content-Type" content="application/xml+xhtml; charset=UTF-8" />
+<title>typescript</title>
+<style type="text/css">
+.reset       {color: black;}
+.bg-reset    {background-color: white;}
+.inverted    {color: white;}
+.bg-inverted {background-color: black;}
+.dimgray     {color: dimgray;}
+.red         {color: red;}
+.green       {color: green;}
+.yellow      {color: olive;}
+.blue        {color: blue;}
+.purple      {color: purple;}
+.cyan        {color: teal;}
+.white       {color: gray;}
+.bg-black    {background-color: black;}
+.bg-red      {background-color: red;}
+.bg-green    {background-color: green;}
+.bg-yellow   {background-color: olive;}
+.bg-blue     {background-color: blue;}
+.bg-purple   {background-color: purple;}
+.bg-cyan     {background-color: teal;}
+.bg-white    {background-color: gray;}
+.underline   {text-decoration: underline;}
+.bold        {font-weight: bold;}
+.italic      {font-style: italic;}
+.blink       {text-decoration: blink;}
+.crossed-out {text-decoration: line-through;}
+.highlighted {filter: contrast(100%) brightness(190%);}
+</style>
+</head>
+<body>
+<pre>
+Script started on 2024-01-17 02:40:43-08:00 [TERM=&quot;xterm-256color&quot; TTY=&quot;/dev/pts/3&quot; COLUMNS=&quot;156&quot; LINES=&quot;40&quot;]
+'forge clean' running (wd: /mnt/c/Users/Thoma/Documents/edgeless-contracts)
+'forge config --json' running
+'forge build --build-info --skip */test/** */script/** --force' running (wd: /mnt/c/Users/Thoma/Documents/edgeless-contracts)
+INFO:Detectors:<span class="highlighted red ">
+EdgelessDeposit.withdrawEth(address,uint256) (src/EdgelessDeposit.sol#229-237) sends eth to arbitrary user
+	Dangerous calls:
+	- (success,data) = to.call{value: amount}() (src/EdgelessDeposit.sol#232)
+StakingManager._withdrawEth(uint256) (src/StakingManager.sol#79-87) sends eth to arbitrary user
+	Dangerous calls:
+	- (success,data) = depositor.call{value: withdrawnAmount}() (src/StakingManager.sol#83)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#functions-that-send-ether-to-arbitrary-destinations</span>
+INFO:Detectors:<span class="highlighted red ">
+DepositManager._depositUsdc(uint256) (src/DepositManager.sol#44-57) ignores return value by Usdc.transferFrom(msg.sender,address(this),UsdcAmount) (src/DepositManager.sol#52)
+DepositManager._depositDai(uint256) (src/DepositManager.sol#90-96) ignores return value by Dai.transferFrom(msg.sender,address(this),DaiAmount) (src/DepositManager.sol#94)
+DepositManager._depositStEth(uint256) (src/DepositManager.sol#103-109) ignores return value by LIDO.transferFrom(msg.sender,address(this),stEthAmount) (src/DepositManager.sol#107)
+EdgelessDeposit.withdrawUSD(address,uint256) (src/EdgelessDeposit.sol#244-249) ignores return value by IERC20(address(Dai)).transfer(to,amount) (src/EdgelessDeposit.sol#247)
+DaiStrategy.deposit(uint256) (src/strategies/DaiStrategy.sol#35-43) ignores return value by Dai.transferFrom(msg.sender,address(this),amount) (src/strategies/DaiStrategy.sol#39)
+DaiStrategy.withdraw(uint256) (src/strategies/DaiStrategy.sol#45-52) ignores return value by Dai.transfer(stakingManager,withdrawnAmount) (src/strategies/DaiStrategy.sol#50)
+DaiStrategy.ownerWithdraw(uint256) (src/strategies/DaiStrategy.sol#61-68) ignores return value by Dai.transfer(stakingManager,withdrawnAmount) (src/strategies/DaiStrategy.sol#66)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-transfer</span>
+INFO:Detectors:<span class="highlighted red ">
+EdgelessDeposit (src/EdgelessDeposit.sol#21-357) is an upgradeable contract that does not protect its initialize functions: EdgelessDeposit.initialize(address,address,IL1StandardBridge,StakingManager) (src/EdgelessDeposit.sol#52-71). Anyone can delete the contract with: UUPSUpgradeable.upgradeToAndCall(address,bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol#86-89)Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unprotected-upgradeable-contract</span>
+INFO:Detectors:<span class="highlighted yellow ">
+MakerMath.rpow(uint256,uint256,uint256) (src/lib/MakerMath.sol#14-43) performs a multiplication on the result of a division:
+	- x = xxRound_rpow_asm_0 / base (src/lib/MakerMath.sol#32)
+	- zx_rpow_asm_0 = z * x (src/lib/MakerMath.sol#34)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#divide-before-multiply</span>
+INFO:Detectors:<span class="highlighted yellow ">
+IUsdt (src/interfaces/IUsdt.sol#4-10) has incorrect ERC20 function interface:IUsdt.transfer(address,uint256) (src/interfaces/IUsdt.sol#5)
+IUsdt (src/interfaces/IUsdt.sol#4-10) has incorrect ERC20 function interface:IUsdt.transferFrom(address,address,uint256) (src/interfaces/IUsdt.sol#6)
+IUsdt (src/interfaces/IUsdt.sol#4-10) has incorrect ERC20 function interface:IUsdt.approve(address,uint256) (src/interfaces/IUsdt.sol#7)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-erc20-interface</span>
+INFO:Detectors:<span class="highlighted yellow ">
+Contract locking ether found:
+	Contract DaiStrategy (src/strategies/DaiStrategy.sol#11-94) has payable functions:
+	 - IStakingStrategy.deposit(uint256) (src/interfaces/IStakingStrategy.sol#5)
+	 - IStakingStrategy.ownerDeposit(uint256) (src/interfaces/IStakingStrategy.sol#7)
+	 - DaiStrategy.deposit(uint256) (src/strategies/DaiStrategy.sol#35-43)
+	 - DaiStrategy.ownerDeposit(uint256) (src/strategies/DaiStrategy.sol#55-59)
+	But does not have a function to withdraw the ether
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#contracts-that-lock-ether</span>
+INFO:Detectors:<span class="highlighted yellow ">
+StakingManager._withdrawEth(uint256).withdrawnAmount (src/StakingManager.sol#81) is a local variable never initialized
+StakingManager._withdrawERC20(address,uint256).withdrawnAmount (src/StakingManager.sol#91) is a local variable never initialized
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#uninitialized-local-variables</span>
+INFO:Detectors:<span class="highlighted yellow ">
+ERC1967Utils.upgradeToAndCall(address,bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Utils.sol#83-92) ignores return value by Address.functionDelegateCall(newImplementation,data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Utils.sol#88)
+ERC1967Utils.upgradeBeaconToAndCall(address,bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Utils.sol#173-182) ignores return value by Address.functionDelegateCall(IBeacon(newBeacon).implementation(),data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Utils.sol#178)
+DepositManager._depositUsdc(uint256) (src/DepositManager.sol#44-57) ignores return value by Usdc.approve(PSM.gemJoin(),UsdcAmount) (src/DepositManager.sol#55)
+EdgelessDeposit.depositStEth(address,uint256) (src/EdgelessDeposit.sol#99-107) ignores return value by IERC20(address(LIDO)).approve(address(stakingManager),stEthAmount) (src/EdgelessDeposit.sol#103)
+EdgelessDeposit.depositUsdc(address,uint256) (src/EdgelessDeposit.sol#115-122) ignores return value by IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#118)
+EdgelessDeposit.depositUsdt(address,uint256,uint256) (src/EdgelessDeposit.sol#131-138) ignores return value by IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#134)
+EdgelessDeposit.depositDai(address,uint256) (src/EdgelessDeposit.sol#145-152) ignores return value by IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#148)
+EdgelessDeposit._bridgeToL2(WrappedToken,address,address,uint256) (src/EdgelessDeposit.sol#326-332) ignores return value by wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+StakingManager._stakeERC20(address,uint256) (src/StakingManager.sol#63-68) ignores return value by IERC20(asset).approve(address(strategy),amount) (src/StakingManager.sol#66)
+DaiStrategy.deposit(uint256) (src/strategies/DaiStrategy.sol#35-43) ignores return value by Dai.approve(address(DSR_MANAGER),amount) (src/strategies/DaiStrategy.sol#40)
+DaiStrategy.ownerDeposit(uint256) (src/strategies/DaiStrategy.sol#55-59) ignores return value by Dai.approve(address(DSR_MANAGER),amount) (src/strategies/DaiStrategy.sol#56)
+EthStrategy.requestLidoWithdrawal(uint256[]) (src/strategies/EthStrategy.sol#80-92) ignores return value by LIDO.approve(address(LIDO_WITHDRAWAL_ERC721),total) (src/strategies/EthStrategy.sol#89)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return</span>
+INFO:Detectors:<span class="highlighted green ">
+WrappedToken.constructor(address,string,string).name (src/WrappedToken.sol#29) shadows:
+	- ERC20.name() (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#58-60) (function)
+	- IERC20Metadata.name() (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol#15) (function)
+WrappedToken.constructor(address,string,string).symbol (src/WrappedToken.sol#29) shadows:
+	- ERC20.symbol() (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#66-68) (function)
+	- IERC20Metadata.symbol() (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol#20) (function)
+OptimismMintableERC20.constructor(address,address,string,string)._name (src/edgeless/OptimismMintableERC20.sol#44) shadows:
+	- ERC20._name (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#41) (state variable)
+OptimismMintableERC20.constructor(address,address,string,string)._symbol (src/edgeless/OptimismMintableERC20.sol#45) shadows:
+	- ERC20._symbol (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#42) (state variable)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#local-variable-shadowing</span>
+INFO:Detectors:<span class="highlighted green ">
+EdgelessDeposit.withdrawEth(address,uint256).to (src/EdgelessDeposit.sol#229) lacks a zero-check on :
+		- (success,data) = to.call{value: amount}() (src/EdgelessDeposit.sol#232)
+StakingManager.initialize(address,address)._staker (src/StakingManager.sol#43) lacks a zero-check on :
+		- staker = _staker (src/StakingManager.sol#44)
+StakingManager.setStaker(address)._staker (src/StakingManager.sol#99) lacks a zero-check on :
+		- staker = _staker (src/StakingManager.sol#100)
+StakingManager.setDepositor(address)._depositor (src/StakingManager.sol#104) lacks a zero-check on :
+		- depositor = _depositor (src/StakingManager.sol#105)
+WrappedToken.constructor(address,string,string)._minter (src/WrappedToken.sol#29) lacks a zero-check on :
+		- minter = _minter (src/WrappedToken.sol#30)
+OptimismMintableERC20.constructor(address,address,string,string)._remoteToken (src/edgeless/OptimismMintableERC20.sol#43) lacks a zero-check on :
+		- REMOTE_TOKEN = _remoteToken (src/edgeless/OptimismMintableERC20.sol#49)
+OptimismMintableERC20.constructor(address,address,string,string)._bridge (src/edgeless/OptimismMintableERC20.sol#42) lacks a zero-check on :
+		- BRIDGE = _bridge (src/edgeless/OptimismMintableERC20.sol#50)
+DaiStrategy.initialize(address,address)._stakingManager (src/strategies/DaiStrategy.sol#23) lacks a zero-check on :
+		- stakingManager = _stakingManager (src/strategies/DaiStrategy.sol#24)
+DaiStrategy.setStakingManager(address)._stakingManager (src/strategies/DaiStrategy.sol#70) lacks a zero-check on :
+		- stakingManager = _stakingManager (src/strategies/DaiStrategy.sol#71)
+EthStrategy.initialize(address,address)._stakingManager (src/strategies/EthStrategy.sol#29) lacks a zero-check on :
+		- stakingManager = _stakingManager (src/strategies/EthStrategy.sol#30)
+EthStrategy.setStakingManager(address)._stakingManager (src/strategies/EthStrategy.sol#101) lacks a zero-check on :
+		- stakingManager = _stakingManager (src/strategies/EthStrategy.sol#102)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation</span>
+INFO:Detectors:<span class="highlighted green ">
+StakingManager.getAssetTotal(address) (src/StakingManager.sol#141-146) has external calls inside a loop: total += strategy.underlyingAssetAmount() (src/StakingManager.sol#144)
+StakingManager.getAssetTotalNoUpdate(address) (src/StakingManager.sol#148-153) has external calls inside a loop: total += strategy.underlyingAssetAmountNoUpdate() (src/StakingManager.sol#151)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation/#calls-inside-a-loop</span>
+INFO:Detectors:<span class="highlighted green ">
+Reentrancy in EdgelessDeposit._bridgeToL2(WrappedToken,address,address,uint256) (src/EdgelessDeposit.sol#326-332):
+	External calls:
+	- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+	- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+Reentrancy in EthStrategy.claimLidoWithdrawals(uint256[]) (src/strategies/EthStrategy.sol#94-99):
+	External calls:
+	- LIDO_WITHDRAWAL_ERC721.claimWithdrawals(requestIds,_hints) (src/strategies/EthStrategy.sol#97)
+	Event emitted after the call(s):
+	- ClaimedLidoWithdrawals(requestIds) (src/strategies/EthStrategy.sol#98)
+Reentrancy in DaiStrategy.deposit(uint256) (src/strategies/DaiStrategy.sol#35-43):
+	External calls:
+	- Dai.transferFrom(msg.sender,address(this),amount) (src/strategies/DaiStrategy.sol#39)
+	- Dai.approve(address(DSR_MANAGER),amount) (src/strategies/DaiStrategy.sol#40)
+	- DSR_MANAGER.join(address(this),amount) (src/strategies/DaiStrategy.sol#41)
+	Event emitted after the call(s):
+	- DaiStaked(amount) (src/strategies/DaiStrategy.sol#42)
+Reentrancy in EthStrategy.deposit(uint256) (src/strategies/EthStrategy.sol#36-45):
+	External calls:
+	- LIDO.submit{value: amounts}(address(0)) (src/strategies/EthStrategy.sol#43)
+	Event emitted after the call(s):
+	- EthStaked(amounts) (src/strategies/EthStrategy.sol#44)
+Reentrancy in EdgelessDeposit.depositDai(address,uint256) (src/EdgelessDeposit.sol#145-152):
+	External calls:
+	- mintAmount = _depositDai(DaiAmount) (src/EdgelessDeposit.sol#146)
+		- Dai.transferFrom(msg.sender,address(this),DaiAmount) (src/DepositManager.sol#94)
+	- _mintWrappedUSD(to,mintAmount) (src/EdgelessDeposit.sol#147)
+		- wrappedUSD.mint(address(this),amount) (src/EdgelessDeposit.sol#352)
+		- wrappedUSD.mint(to,amount) (src/EdgelessDeposit.sol#354)
+	- IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#148)
+	- stakingManager.stake(address(Dai),mintAmount) (src/EdgelessDeposit.sol#149)
+	- _bridgeToL2(wrappedUSD,l2USD,to,mintAmount) (src/EdgelessDeposit.sol#150)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- _bridgeToL2(wrappedUSD,l2USD,to,mintAmount) (src/EdgelessDeposit.sol#150)
+	- DepositDai(to,msg.sender,DaiAmount,mintAmount) (src/EdgelessDeposit.sol#151)
+Reentrancy in EdgelessDeposit.depositDaiWithPermit(address,uint256,uint256,uint256,uint8,bytes32,bytes32) (src/EdgelessDeposit.sol#209-222):
+	External calls:
+	- Dai.permit(msg.sender,address(this),nonce,expiry,true,v,r,s) (src/EdgelessDeposit.sol#220)
+	- depositDai(to,DaiAmount) (src/EdgelessDeposit.sol#221)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- wrappedUSD.mint(address(this),amount) (src/EdgelessDeposit.sol#352)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+		- wrappedUSD.mint(to,amount) (src/EdgelessDeposit.sol#354)
+		- IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#148)
+		- stakingManager.stake(address(Dai),mintAmount) (src/EdgelessDeposit.sol#149)
+		- Dai.transferFrom(msg.sender,address(this),DaiAmount) (src/DepositManager.sol#94)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- depositDai(to,DaiAmount) (src/EdgelessDeposit.sol#221)
+	- DepositDai(to,msg.sender,DaiAmount,mintAmount) (src/EdgelessDeposit.sol#151)
+		- depositDai(to,DaiAmount) (src/EdgelessDeposit.sol#221)
+Reentrancy in EdgelessDeposit.depositEth(address) (src/EdgelessDeposit.sol#86-92):
+	External calls:
+	- _mintWrappedEth(to,amount) (src/EdgelessDeposit.sol#88)
+		- wrappedEth.mint(address(this),amount) (src/EdgelessDeposit.sol#340)
+		- wrappedEth.mint(to,amount) (src/EdgelessDeposit.sol#342)
+	- stakingManager.stake{value: amount}(stakingManager.ETH_ADDRESS(),amount) (src/EdgelessDeposit.sol#89)
+	- _bridgeToL2(wrappedEth,l2Eth,to,amount) (src/EdgelessDeposit.sol#90)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+	External calls sending eth:
+	- stakingManager.stake{value: amount}(stakingManager.ETH_ADDRESS(),amount) (src/EdgelessDeposit.sol#89)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- _bridgeToL2(wrappedEth,l2Eth,to,amount) (src/EdgelessDeposit.sol#90)
+	- DepositEth(to,msg.sender,msg.value,amount) (src/EdgelessDeposit.sol#91)
+Reentrancy in EdgelessDeposit.depositStEth(address,uint256) (src/EdgelessDeposit.sol#99-107):
+	External calls:
+	- mintAmount = _depositStEth(stEthAmount) (src/EdgelessDeposit.sol#100)
+		- LIDO.transferFrom(msg.sender,address(this),stEthAmount) (src/DepositManager.sol#107)
+	- _mintWrappedEth(to,mintAmount) (src/EdgelessDeposit.sol#102)
+		- wrappedEth.mint(address(this),amount) (src/EdgelessDeposit.sol#340)
+		- wrappedEth.mint(to,amount) (src/EdgelessDeposit.sol#342)
+	- IERC20(address(LIDO)).approve(address(stakingManager),stEthAmount) (src/EdgelessDeposit.sol#103)
+	- stakingManager.stake(address(LIDO),stEthAmount) (src/EdgelessDeposit.sol#104)
+	- _bridgeToL2(wrappedEth,l2Eth,to,mintAmount) (src/EdgelessDeposit.sol#105)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- _bridgeToL2(wrappedEth,l2Eth,to,mintAmount) (src/EdgelessDeposit.sol#105)
+	- DepositStEth(to,msg.sender,stEthAmount,mintAmount) (src/EdgelessDeposit.sol#106)
+Reentrancy in EdgelessDeposit.depositStEthWithPermit(address,uint256,uint256,uint8,bytes32,bytes32) (src/EdgelessDeposit.sol#186-198):
+	External calls:
+	- LIDO.permit(msg.sender,address(this),stEthAmount,deadline,v,r,s) (src/EdgelessDeposit.sol#196)
+	- depositStEth(to,stEthAmount) (src/EdgelessDeposit.sol#197)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- wrappedEth.mint(address(this),amount) (src/EdgelessDeposit.sol#340)
+		- wrappedEth.mint(to,amount) (src/EdgelessDeposit.sol#342)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+		- IERC20(address(LIDO)).approve(address(stakingManager),stEthAmount) (src/EdgelessDeposit.sol#103)
+		- LIDO.transferFrom(msg.sender,address(this),stEthAmount) (src/DepositManager.sol#107)
+		- stakingManager.stake(address(LIDO),stEthAmount) (src/EdgelessDeposit.sol#104)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- depositStEth(to,stEthAmount) (src/EdgelessDeposit.sol#197)
+	- DepositStEth(to,msg.sender,stEthAmount,mintAmount) (src/EdgelessDeposit.sol#106)
+		- depositStEth(to,stEthAmount) (src/EdgelessDeposit.sol#197)
+Reentrancy in EdgelessDeposit.depositUsdc(address,uint256) (src/EdgelessDeposit.sol#115-122):
+	External calls:
+	- mintAmount = _depositUsdc(UsdcAmount) (src/EdgelessDeposit.sol#116)
+		- Usdc.transferFrom(msg.sender,address(this),UsdcAmount) (src/DepositManager.sol#52)
+		- Usdc.approve(PSM.gemJoin(),UsdcAmount) (src/DepositManager.sol#55)
+		- PSM.sellGem(address(this),UsdcAmount) (src/DepositManager.sol#56)
+	- _mintWrappedUSD(to,mintAmount) (src/EdgelessDeposit.sol#117)
+		- wrappedUSD.mint(address(this),amount) (src/EdgelessDeposit.sol#352)
+		- wrappedUSD.mint(to,amount) (src/EdgelessDeposit.sol#354)
+	- IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#118)
+	- stakingManager.stake(address(Dai),mintAmount) (src/EdgelessDeposit.sol#119)
+	- _bridgeToL2(wrappedUSD,l2USD,to,mintAmount) (src/EdgelessDeposit.sol#120)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- _bridgeToL2(wrappedUSD,l2USD,to,mintAmount) (src/EdgelessDeposit.sol#120)
+	- DepositUsdc(to,msg.sender,UsdcAmount,mintAmount) (src/EdgelessDeposit.sol#121)
+Reentrancy in EdgelessDeposit.depositUsdcWithPermit(address,uint256,uint256,uint8,bytes32,bytes32) (src/EdgelessDeposit.sol#163-175):
+	External calls:
+	- Usdc.permit(msg.sender,address(this),UsdcAmount,deadline,v,r,s) (src/EdgelessDeposit.sol#173)
+	- depositUsdc(to,UsdcAmount) (src/EdgelessDeposit.sol#174)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- wrappedUSD.mint(address(this),amount) (src/EdgelessDeposit.sol#352)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+		- IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#118)
+		- wrappedUSD.mint(to,amount) (src/EdgelessDeposit.sol#354)
+		- stakingManager.stake(address(Dai),mintAmount) (src/EdgelessDeposit.sol#119)
+		- Usdc.transferFrom(msg.sender,address(this),UsdcAmount) (src/DepositManager.sol#52)
+		- Usdc.approve(PSM.gemJoin(),UsdcAmount) (src/DepositManager.sol#55)
+		- PSM.sellGem(address(this),UsdcAmount) (src/DepositManager.sol#56)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- depositUsdc(to,UsdcAmount) (src/EdgelessDeposit.sol#174)
+	- DepositUsdc(to,msg.sender,UsdcAmount,mintAmount) (src/EdgelessDeposit.sol#121)
+		- depositUsdc(to,UsdcAmount) (src/EdgelessDeposit.sol#174)
+Reentrancy in EdgelessDeposit.depositUsdt(address,uint256,uint256) (src/EdgelessDeposit.sol#131-138):
+	External calls:
+	- mintAmount = _depositUsdt(UsdtAmount,minDaiAmount) (src/EdgelessDeposit.sol#132)
+		- Usdt.transferFrom(msg.sender,address(this),UsdtAmount) (src/DepositManager.sol#72)
+		- Usdt.approve(address(CURVE_3POOL),receivedUsdt) (src/DepositManager.sol#77)
+		- CURVE_3POOL.exchange(_CURVE_Usdt_INDEX,_CURVE_Dai_INDEX,receivedUsdt,minDaiAmount) (src/DepositManager.sol#78)
+	- _mintWrappedUSD(to,mintAmount) (src/EdgelessDeposit.sol#133)
+		- wrappedUSD.mint(address(this),amount) (src/EdgelessDeposit.sol#352)
+		- wrappedUSD.mint(to,amount) (src/EdgelessDeposit.sol#354)
+	- IERC20(address(Dai)).approve(address(stakingManager),mintAmount) (src/EdgelessDeposit.sol#134)
+	- stakingManager.stake(address(Dai),mintAmount) (src/EdgelessDeposit.sol#135)
+	- _bridgeToL2(wrappedUSD,l2USD,to,mintAmount) (src/EdgelessDeposit.sol#136)
+		- wrappedToken.approve(address(l1standardBridge),amount) (src/EdgelessDeposit.sol#328)
+		- l1standardBridge.depositERC20To(address(wrappedToken),l2WrappedToken,to,amount,0,) (src/EdgelessDeposit.sol#329)
+	Event emitted after the call(s):
+	- BridgeToL2(address(wrappedToken),l2WrappedToken,to,amount) (src/EdgelessDeposit.sol#330)
+		- _bridgeToL2(wrappedUSD,l2USD,to,mintAmount) (src/EdgelessDeposit.sol#136)
+	- DepositUsdt(to,msg.sender,UsdtAmount,mintAmount) (src/EdgelessDeposit.sol#137)
+Reentrancy in EdgelessDeposit.mintEthBasedOnStakedAmount(address,uint256) (src/EdgelessDeposit.sol#299-306):
+	External calls:
+	- maxMint = stakingManager.getAssetTotal(stakingManager.ETH_ADDRESS()) - wrappedEth.totalSupply() (src/EdgelessDeposit.sol#300)
+	- wrappedEth.mint(to,amount) (src/EdgelessDeposit.sol#304)
+	Event emitted after the call(s):
+	- MintWrappedEth(to,amount) (src/EdgelessDeposit.sol#305)
+Reentrancy in EdgelessDeposit.mintUSDBasedOnStakedAmount(address,uint256) (src/EdgelessDeposit.sol#314-321):
+	External calls:
+	- maxMint = stakingManager.getAssetTotal(address(Dai)) - wrappedUSD.totalSupply() (src/EdgelessDeposit.sol#315)
+	- wrappedUSD.mint(to,amount) (src/EdgelessDeposit.sol#319)
+	Event emitted after the call(s):
+	- MintWrappedUSD(to,amount) (src/EdgelessDeposit.sol#320)
+Reentrancy in DaiStrategy.ownerDeposit(uint256) (src/strategies/DaiStrategy.sol#55-59):
+	External calls:
+	- Dai.approve(address(DSR_MANAGER),amount) (src/strategies/DaiStrategy.sol#56)
+	- DSR_MANAGER.join(address(this),amount) (src/strategies/DaiStrategy.sol#57)
+	Event emitted after the call(s):
+	- DaiStaked(amount) (src/strategies/DaiStrategy.sol#58)
+Reentrancy in EthStrategy.ownerDeposit(uint256) (src/strategies/EthStrategy.sol#63-69):
+	External calls:
+	- LIDO.submit{value: amount}(address(0)) (src/strategies/EthStrategy.sol#67)
+	Event emitted after the call(s):
+	- EthStaked(amount) (src/strategies/EthStrategy.sol#68)
+Reentrancy in DaiStrategy.ownerWithdraw(uint256) (src/strategies/DaiStrategy.sol#61-68):
+	External calls:
+	- DSR_MANAGER.exit(address(this),amount) (src/strategies/DaiStrategy.sol#63)
+	- Dai.transfer(stakingManager,withdrawnAmount) (src/strategies/DaiStrategy.sol#66)
+	Event emitted after the call(s):
+	- DaiWithdrawn(withdrawnAmount) (src/strategies/DaiStrategy.sol#67)
+Reentrancy in EthStrategy.ownerWithdraw(uint256) (src/strategies/EthStrategy.sol#71-78):
+	External calls:
+	- (success,data) = stakingManager.call{value: amount}() (src/strategies/EthStrategy.sol#72)
+	Event emitted after the call(s):
+	- EthWithdrawn(amount) (src/strategies/EthStrategy.sol#76)
+Reentrancy in StakingManager.removeStrategy(address,uint256) (src/StakingManager.sol#124-134):
+	External calls:
+	- withdrawnAmount = strategy.withdraw(strategy.underlyingAssetAmount()) (src/StakingManager.sol#132)
+	Event emitted after the call(s):
+	- RemoveStrategy(asset,strategy,withdrawnAmount) (src/StakingManager.sol#133)
+Reentrancy in EthStrategy.requestLidoWithdrawal(uint256[]) (src/strategies/EthStrategy.sol#80-92):
+	External calls:
+	- LIDO.approve(address(LIDO_WITHDRAWAL_ERC721),total) (src/strategies/EthStrategy.sol#89)
+	- requestIds = LIDO_WITHDRAWAL_ERC721.requestWithdrawals(amounts,address(this)) (src/strategies/EthStrategy.sol#90)
+	Event emitted after the call(s):
+	- RequestedLidoWithdrawals(requestIds,amounts) (src/strategies/EthStrategy.sol#91)
+Reentrancy in StakingManager.stake(address,uint256) (src/StakingManager.sol#49-56):
+	External calls:
+	- _stakeEth(msg.value) (src/StakingManager.sol#51)
+		- strategy.deposit{value: amount}(amount) (src/StakingManager.sol#60)
+	- _stakeERC20(asset,amount) (src/StakingManager.sol#53)
+		- returndata = address(token).functionCall(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol#96)
+		- IERC20(asset).safeTransferFrom(msg.sender,address(this),amount) (src/StakingManager.sol#65)
+		- IERC20(asset).approve(address(strategy),amount) (src/StakingManager.sol#66)
+		- strategy.deposit(amount) (src/StakingManager.sol#67)
+		- (success,returndata) = target.call{value: value}(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#87)
+	External calls sending eth:
+	- _stakeEth(msg.value) (src/StakingManager.sol#51)
+		- strategy.deposit{value: amount}(amount) (src/StakingManager.sol#60)
+	- _stakeERC20(asset,amount) (src/StakingManager.sol#53)
+		- (success,returndata) = target.call{value: value}(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#87)
+	Event emitted after the call(s):
+	- Stake(asset,amount) (src/StakingManager.sol#55)
+Reentrancy in StakingManager.withdraw(address,uint256) (src/StakingManager.sol#70-77):
+	External calls:
+	- _withdrawEth(amount) (src/StakingManager.sol#72)
+		- withdrawnAmount = strategy.withdraw(amount) (src/StakingManager.sol#82)
+		- (success,data) = depositor.call{value: withdrawnAmount}() (src/StakingManager.sol#83)
+	- _withdrawERC20(asset,amount) (src/StakingManager.sol#74)
+		- returndata = address(token).functionCall(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol#96)
+		- withdrawnAmount = strategy.withdraw(amount) (src/StakingManager.sol#93)
+		- IERC20(asset).safeTransfer(depositor,withdrawnAmount) (src/StakingManager.sol#95)
+		- (success,returndata) = target.call{value: value}(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#87)
+	External calls sending eth:
+	- _withdrawEth(amount) (src/StakingManager.sol#72)
+		- (success,data) = depositor.call{value: withdrawnAmount}() (src/StakingManager.sol#83)
+	- _withdrawERC20(asset,amount) (src/StakingManager.sol#74)
+		- (success,returndata) = target.call{value: value}(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#87)
+	Event emitted after the call(s):
+	- Withdraw(asset,amount) (src/StakingManager.sol#76)
+Reentrancy in DaiStrategy.withdraw(uint256) (src/strategies/DaiStrategy.sol#45-52):
+	External calls:
+	- DSR_MANAGER.exit(address(this),amount) (src/strategies/DaiStrategy.sol#47)
+	- Dai.transfer(stakingManager,withdrawnAmount) (src/strategies/DaiStrategy.sol#50)
+	Event emitted after the call(s):
+	- DaiWithdrawn(withdrawnAmount) (src/strategies/DaiStrategy.sol#51)
+Reentrancy in EthStrategy.withdraw(uint256) (src/strategies/EthStrategy.sol#47-60):
+	External calls:
+	- (success,data) = stakingManager.call{value: withdrawnAmount}() (src/strategies/EthStrategy.sol#54)
+	Event emitted after the call(s):
+	- EthWithdrawn(withdrawnAmount) (src/strategies/EthStrategy.sol#58)
+Reentrancy in EdgelessDeposit.withdrawEth(address,uint256) (src/EdgelessDeposit.sol#229-237):
+	External calls:
+	- wrappedEth.burn(msg.sender,amount) (src/EdgelessDeposit.sol#230)
+	- stakingManager.withdraw(stakingManager.ETH_ADDRESS(),amount) (src/EdgelessDeposit.sol#231)
+	- (success,data) = to.call{value: amount}() (src/EdgelessDeposit.sol#232)
+	External calls sending eth:
+	- (success,data) = to.call{value: amount}() (src/EdgelessDeposit.sol#232)
+	Event emitted after the call(s):
+	- WithdrawEth(msg.sender,to,amount,amount) (src/EdgelessDeposit.sol#236)
+Reentrancy in EdgelessDeposit.withdrawUSD(address,uint256) (src/EdgelessDeposit.sol#244-249):
+	External calls:
+	- wrappedUSD.burn(msg.sender,amount) (src/EdgelessDeposit.sol#245)
+	- stakingManager.withdraw(address(Dai),amount) (src/EdgelessDeposit.sol#246)
+	- IERC20(address(Dai)).transfer(to,amount) (src/EdgelessDeposit.sol#247)
+	Event emitted after the call(s):
+	- WithdrawUSD(msg.sender,to,amount,amount) (src/EdgelessDeposit.sol#248)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3</span>
+INFO:Detectors:<span class="highlighted green ">
+Ownable2StepUpgradeable._getOwnable2StepStorage() (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#29-33) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#30-32)
+OwnableUpgradeable._getOwnableStorage() (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#30-34) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#31-33)
+Initializable._getInitializableStorage() (lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol#223-227) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol#224-226)
+Address._revert(bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#146-158) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#151-154)
+StorageSlot.getAddressSlot(bytes32) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#59-64) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#61-63)
+StorageSlot.getBooleanSlot(bytes32) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#69-74) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#71-73)
+StorageSlot.getBytes32Slot(bytes32) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#79-84) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#81-83)
+StorageSlot.getUint256Slot(bytes32) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#89-94) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#91-93)
+StorageSlot.getStringSlot(bytes32) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#99-104) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#101-103)
+StorageSlot.getStringSlot(string) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#109-114) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#111-113)
+StorageSlot.getBytesSlot(bytes32) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#119-124) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#121-123)
+StorageSlot.getBytesSlot(bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#129-134) uses assembly
+	- INLINE ASM (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#131-133)
+MakerMath.rpow(uint256,uint256,uint256) (src/lib/MakerMath.sol#14-43) uses assembly
+	- INLINE ASM (src/lib/MakerMath.sol#15-42)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage</span>
+INFO:Detectors:<span class="highlighted green ">
+Different versions of Solidity are used:
+	- Version used: ['&gt;=0.8.23', '^0.8.0', '^0.8.20']
+	- &gt;=0.8.23 (src/Constants.sol#2)
+	- &gt;=0.8.23 (src/DepositManager.sol#2)
+	- &gt;=0.8.23 (src/EdgelessDeposit.sol#2)
+	- &gt;=0.8.23 (src/StakingManager.sol#2)
+	- &gt;=0.8.23 (src/WrappedToken.sol#2)
+	- &gt;=0.8.23 (src/edgeless/OptimismMintableERC20.sol#2)
+	- &gt;=0.8.23 (src/interfaces/ICurve3Pool.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IDai.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IDsrManager.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IDssPsm.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IL1StandardBridge.sol#2)
+	- &gt;=0.8.23 (src/interfaces/ILido.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IPot.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IStakingStrategy.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IUsdc.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IUsdt.sol#2)
+	- &gt;=0.8.23 (src/interfaces/IWithdrawalQueueERC721.sol#2)
+	- &gt;=0.8.23 (src/lib/MakerMath.sol#2)
+	- &gt;=0.8.23 (src/strategies/DaiStrategy.sol#2)
+	- &gt;=0.8.23 (src/strategies/EthStrategy.sol#2)
+	- ^0.8.0 (src/edgeless/IOptimismMintableERC20.sol#2)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/utils/ContextUpgradeable.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC6093.sol#3)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Utils.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Context.sol#4)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#5)
+	- ^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol#4)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#different-pragma-directives-are-used</span>
+INFO:Detectors:<span class="highlighted green ">
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/contracts/utils/ContextUpgradeable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC1822.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/interfaces/draft-IERC6093.sol#3) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Utils.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/beacon/IBeacon.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Context.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol#5) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/Constants.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/DepositManager.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/EdgelessDeposit.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/StakingManager.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/WrappedToken.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.0 (src/edgeless/IOptimismMintableERC20.sol#2) allows old versions
+Pragma version&gt;=0.8.23 (src/edgeless/OptimismMintableERC20.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/ICurve3Pool.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IDai.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IDsrManager.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IDssPsm.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IL1StandardBridge.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/ILido.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IPot.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IStakingStrategy.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IUsdc.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IUsdt.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/interfaces/IWithdrawalQueueERC721.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/lib/MakerMath.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/strategies/DaiStrategy.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version&gt;=0.8.23 (src/strategies/EthStrategy.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+solc-0.8.23 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity</span>
+INFO:Detectors:<span class="highlighted green ">
+Low level call in SafeERC20._callOptionalReturnBool(IERC20,bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol#110-117):
+	- (success,returndata) = address(token).call(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol#115)
+Low level call in Address.sendValue(address,uint256) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#41-50):
+	- (success) = recipient.call{value: amount}() (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#46)
+Low level call in Address.functionCallWithValue(address,bytes,uint256) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#83-89):
+	- (success,returndata) = target.call{value: value}(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#87)
+Low level call in Address.functionStaticCall(address,bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#95-98):
+	- (success,returndata) = target.staticcall(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#96)
+Low level call in Address.functionDelegateCall(address,bytes) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#104-107):
+	- (success,returndata) = target.delegatecall(data) (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/utils/Address.sol#105)
+Low level call in EdgelessDeposit.withdrawEth(address,uint256) (src/EdgelessDeposit.sol#229-237):
+	- (success,data) = to.call{value: amount}() (src/EdgelessDeposit.sol#232)
+Low level call in StakingManager._withdrawEth(uint256) (src/StakingManager.sol#79-87):
+	- (success,data) = depositor.call{value: withdrawnAmount}() (src/StakingManager.sol#83)
+Low level call in EthStrategy.withdraw(uint256) (src/strategies/EthStrategy.sol#47-60):
+	- (success,data) = stakingManager.call{value: withdrawnAmount}() (src/strategies/EthStrategy.sol#54)
+Low level call in EthStrategy.ownerWithdraw(uint256) (src/strategies/EthStrategy.sol#71-78):
+	- (success,data) = stakingManager.call{value: amount}() (src/strategies/EthStrategy.sol#72)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls</span>
+INFO:Detectors:<span class="highlighted green ">
+Function Ownable2StepUpgradeable.__Ownable2Step_init() (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#37-38) is not in mixedCase
+Function Ownable2StepUpgradeable.__Ownable2Step_init_unchained() (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#40-41) is not in mixedCase
+Constant Ownable2StepUpgradeable.Ownable2StepStorageLocation (lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol#27) is not in UPPER_CASE_WITH_UNDERSCORES
+Function OwnableUpgradeable.__Ownable_init(address) (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#51-53) is not in mixedCase
+Function OwnableUpgradeable.__Ownable_init_unchained(address) (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#55-60) is not in mixedCase
+Constant OwnableUpgradeable.OwnableStorageLocation (lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol#28) is not in UPPER_CASE_WITH_UNDERSCORES
+Function ContextUpgradeable.__Context_init() (lib/openzeppelin-contracts-upgradeable/contracts/utils/ContextUpgradeable.sol#18-19) is not in mixedCase
+Function ContextUpgradeable.__Context_init_unchained() (lib/openzeppelin-contracts-upgradeable/contracts/utils/ContextUpgradeable.sol#21-22) is not in mixedCase
+Variable UUPSUpgradeable.__self (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol#21) is not in mixedCase
+Function IERC20Permit.DOMAIN_SEPARATOR() (lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol#89) is not in mixedCase
+Parameter EdgelessDeposit.initialize(address,address,IL1StandardBridge,StakingManager)._owner (src/EdgelessDeposit.sol#53) is not in mixedCase
+Parameter EdgelessDeposit.initialize(address,address,IL1StandardBridge,StakingManager)._staker (src/EdgelessDeposit.sol#54) is not in mixedCase
+Parameter EdgelessDeposit.initialize(address,address,IL1StandardBridge,StakingManager)._l1standardBridge (src/EdgelessDeposit.sol#55) is not in mixedCase
+Parameter EdgelessDeposit.initialize(address,address,IL1StandardBridge,StakingManager)._stakingManager (src/EdgelessDeposit.sol#56) is not in mixedCase
+Parameter EdgelessDeposit.depositUsdc(address,uint256).UsdcAmount (src/EdgelessDeposit.sol#115) is not in mixedCase
+Parameter EdgelessDeposit.depositUsdt(address,uint256,uint256).UsdtAmount (src/EdgelessDeposit.sol#131) is not in mixedCase
+Parameter EdgelessDeposit.depositDai(address,uint256).DaiAmount (src/EdgelessDeposit.sol#145) is not in mixedCase
+Parameter EdgelessDeposit.depositUsdcWithPermit(address,uint256,uint256,uint8,bytes32,bytes32).UsdcAmount (src/EdgelessDeposit.sol#165) is not in mixedCase
+Parameter EdgelessDeposit.depositDaiWithPermit(address,uint256,uint256,uint256,uint8,bytes32,bytes32).DaiAmount (src/EdgelessDeposit.sol#211) is not in mixedCase
+Parameter EdgelessDeposit.setL1StandardBridge(IL1StandardBridge)._l1standardBridge (src/EdgelessDeposit.sol#256) is not in mixedCase
+Parameter EdgelessDeposit.setL2Eth(address)._l2Eth (src/EdgelessDeposit.sol#266) is not in mixedCase
+Parameter EdgelessDeposit.setL2USD(address)._l2USD (src/EdgelessDeposit.sol#277) is not in mixedCase
+Parameter EdgelessDeposit.setAutoBridge(bool)._autoBridge (src/EdgelessDeposit.sol#288) is not in mixedCase
+Parameter StakingManager.initialize(address,address)._owner (src/StakingManager.sol#43) is not in mixedCase
+Parameter StakingManager.initialize(address,address)._staker (src/StakingManager.sol#43) is not in mixedCase
+Parameter StakingManager.setStaker(address)._staker (src/StakingManager.sol#99) is not in mixedCase
+Parameter StakingManager.setDepositor(address)._depositor (src/StakingManager.sol#104) is not in mixedCase
+Parameter StakingManager.setAutoStake(bool)._autoStake (src/StakingManager.sol#109) is not in mixedCase
+Parameter OptimismMintableERC20.mint(address,uint256)._to (src/edgeless/OptimismMintableERC20.sol#57) is not in mixedCase
+Parameter OptimismMintableERC20.mint(address,uint256)._amount (src/edgeless/OptimismMintableERC20.sol#58) is not in mixedCase
+Parameter OptimismMintableERC20.burn(address,uint256)._from (src/edgeless/OptimismMintableERC20.sol#73) is not in mixedCase
+Parameter OptimismMintableERC20.burn(address,uint256)._amount (src/edgeless/OptimismMintableERC20.sol#74) is not in mixedCase
+Parameter OptimismMintableERC20.supportsInterface(bytes4)._interfaceId (src/edgeless/OptimismMintableERC20.sol#88) is not in mixedCase
+Variable OptimismMintableERC20.REMOTE_TOKEN (src/edgeless/OptimismMintableERC20.sol#16) is not in mixedCase
+Variable OptimismMintableERC20.BRIDGE (src/edgeless/OptimismMintableERC20.sol#19) is not in mixedCase
+Parameter ICurve3Pool.exchange(int128,int128,uint256,uint256).min_dy (src/interfaces/ICurve3Pool.sol#5) is not in mixedCase
+Function IDai.DOMAIN_SEPARATOR() (src/interfaces/IDai.sol#32) is not in mixedCase
+Function IDai.PERMIT_TYPEHASH() (src/interfaces/IDai.sol#33) is not in mixedCase
+Function IDssPsm.Dai() (src/interfaces/IDssPsm.sol#7) is not in mixedCase
+Parameter DaiStrategy.initialize(address,address)._owner (src/strategies/DaiStrategy.sol#23) is not in mixedCase
+Parameter DaiStrategy.initialize(address,address)._stakingManager (src/strategies/DaiStrategy.sol#23) is not in mixedCase
+Parameter DaiStrategy.setStakingManager(address)._stakingManager (src/strategies/DaiStrategy.sol#70) is not in mixedCase
+Parameter DaiStrategy.setAutoStake(bool)._autoStake (src/strategies/DaiStrategy.sol#75) is not in mixedCase
+Parameter EthStrategy.initialize(address,address)._owner (src/strategies/EthStrategy.sol#29) is not in mixedCase
+Parameter EthStrategy.initialize(address,address)._stakingManager (src/strategies/EthStrategy.sol#29) is not in mixedCase
+Parameter EthStrategy.setStakingManager(address)._stakingManager (src/strategies/EthStrategy.sol#101) is not in mixedCase
+Parameter EthStrategy.setAutoStake(bool)._autoStake (src/strategies/EthStrategy.sol#106) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions</span>
+INFO:Detectors:<span class="highlighted green ">
+Variable OptimismMintableERC20.REMOTE_TOKEN (src/edgeless/OptimismMintableERC20.sol#16) is too similar to OptimismMintableERC20.constructor(address,address,string,string)._remoteToken (src/edgeless/OptimismMintableERC20.sol#43)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#variable-names-too-similar</span>
+INFO:Detectors:<span class="highlighted green ">
+WrappedToken.minter (src/WrappedToken.sol#11) should be immutable 
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#state-variables-that-could-be-declared-immutable</span>
+INFO:Slither:. analyzed (41 contracts with 93 detectors), 185 result(s) found
+
+Script done on 2024-01-17 02:41:33-08:00 [COMMAND_EXIT_CODE=&quot;255&quot;]
+</pre>
+</body>
+</html>
